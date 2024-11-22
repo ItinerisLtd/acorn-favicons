@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ItinerisLtd\AcornFavicons\Facades;
 
 use ItinerisLtd\AcornFavicons\AcornFavicons as AcornFaviconsClass;
@@ -12,7 +14,7 @@ class AcornFavicons extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return AcornFaviconsClass::class;
     }

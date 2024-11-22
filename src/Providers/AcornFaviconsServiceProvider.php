@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ItinerisLtd\AcornFavicons\Providers;
 
 use ItinerisLtd\AcornFavicons\AcornFavicons;
@@ -15,7 +17,7 @@ class AcornFaviconsServiceProvider extends SageServiceProvider
     public function register()
     {
         $this->app->singleton('AcornFavicons', function () {
-            return new AcornFavicons($this->app);
+            return new AcornFavicons($this->app, $this->app['config']['acorn-favicons']);
         });
 
         $this->mergeConfigFrom(
