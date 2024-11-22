@@ -1,11 +1,11 @@
 <?php
 
-namespace ItinerisLtd\ExamplePackage;
+namespace ItinerisLtd\AcornFavicons;
 
 use Illuminate\Support\Arr;
 use Roots\Acorn\Application;
 
-class Example
+class AcornFavicons
 {
     /**
      * The application instance.
@@ -23,17 +23,5 @@ class Example
     public function __construct(Application $app)
     {
         $this->app = $app;
-    }
-
-    /**
-     * Retrieve a random inspirational quote.
-     *
-     * @return string
-     */
-    public function getQuote()
-    {
-        return Arr::random(
-            config('example.quotes')
-        );
     }
 }

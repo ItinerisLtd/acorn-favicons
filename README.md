@@ -1,9 +1,9 @@
 # Itineris Acorn Example Package
 
-Based off the [acorn example package](https://github.com/roots/acorn-example-package).
+Based off the [acorn example package](https://github.com/roots/acorn-acorn-favicons).
 To setup for yourself run a search and replace for:
 ```
-ExamplePackage
+AcornFavicons
 ```
 - Changing it to your package name.
 
@@ -20,13 +20,13 @@ $ mv src/Providers/ExampleServiceProvider.php src/Providers/YourPackageNameServi
 You can install this package with Composer:
 
 ```bash
-composer require itinerisltd/example-package
+composer require itinerisltd/acorn-favicons
 ```
 
 You can publish the config file with:
 
 ```shell
-$ wp acorn vendor:publish --provider="ItinerisLtd\ExamplePackage\Providers\ExampleServiceProvider"
+$ wp acorn vendor:publish --provider="ItinerisLtd\AcornFavicons\Providers\ExampleServiceProvider"
 ```
 
 ## Usage

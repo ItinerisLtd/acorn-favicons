@@ -1,7 +1,7 @@
 {
-  "name": "itinerisltd/example-package",
+  "name": "itinerisltd/acorn-favicons",
   "type": "package",
-  "description": "An example package for Roots Acorn.",
+  "description": "Acorn package to generate favicons.",
   "license": "MIT",
   "authors": [
     {
@@ -9,24 +9,29 @@
       "email": "dev@itineris.co.uk",
       "homepage": "https://itineris.co.uk/",
       "role": "Company"
+    },
+    {
+      "name": "Dan Lapteacru",
+      "email": "danlapteacru@gmail.com",
+      "role": "Developer"
     }
   ],
   "autoload": {
     "psr-4": {
-      "ItinerisLtd\\ExamplePackage\\": "src/"
+      "ItinerisLtd\\AcornFavicons\\": "src/"
     }
   },
   "require": {
     "php": "^8.1",
-    "itinerisltd/itineris-wp-coding-standards": "dev-2023-02-01"
+    "itinerisltd/itineris-wp-coding-standards": "*"
   },
   "extra": {
     "acorn": {
       "providers": [
-        "ItinerisLtd\\ExamplePackage\\Providers\\ExampleServiceProvider"
+        "ItinerisLtd\\AcornFavicons\\Providers\\AcornFaviconsServiceProvider"
       ],
       "aliases": {
-        "Example": "ItinerisLtd\\ExamplePackage\\Facades\\Example"
+        "AcornFavicons": "ItinerisLtd\\AcornFavicons\\Facades\\AcornFavicons"
       }
     }
   },

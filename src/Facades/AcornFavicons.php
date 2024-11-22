@@ -1,10 +1,11 @@
 <?php
 
-namespace ItinerisLtd\ExamplePackage\Facades;
+namespace ItinerisLtd\AcornFavicons\Facades;
 
+use ItinerisLtd\AcornFavicons\AcornFavicons as AcornFaviconsClass;
 use Illuminate\Support\Facades\Facade;
 
-class Example extends Facade
+class AcornFavicons extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -13,6 +14,6 @@ class Example extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Example';
+        return AcornFaviconsClass::class;
     }
 }
