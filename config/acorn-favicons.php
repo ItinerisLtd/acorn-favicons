@@ -1,23 +1,10 @@
 <?php
 
-return [
+$path = config_path('/acorn-favicons.json');
+if (! file_exists($path)) {
+    $path = __DIR__ . '/acorn-favicons.json';
+}
 
-    /*
-    |--------------------------------------------------------------------------
-    | Example Package
-    |--------------------------------------------------------------------------
-    |
-    | Configuration files provide a great way to customize your package.
-    |
-    | In most cases, you should provide sane defaults and publishing the config
-    | should be optional.
-    |
-    | Here, we'll define a few inspirational quotes for use in our component
-    | and console command.
-    |
-    */
-
-    'quotes' => [
-        'For every Sage there is an Acorn.',
-    ],
-];
+return wp_json_file_decode($path, [
+    'associative' => true,
+]);
