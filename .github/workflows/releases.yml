@@ -1,0 +1,34 @@
+name: Releases
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get tag
+        id: get_tag
+        run: echo "value=${GITHUB_REF/refs\/tags\//}"
+
+      - name: Setup the PHP 8.1 environment on ${{ runner.os }}
+        uses: shivammathur/setup-php@v2
+        with:
+          # Build with our minimum supported PHP version
+          php-version: "8.1"
+          coverage: xdebug
+
+      - name: Build
+        run: composer run-script release:build
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: Version ${{ steps.get_tag.value }}
+          files: release/itineris-post-types.zip

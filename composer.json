@@ -1,0 +1,42 @@
+{
+  "name": "itinerisltd/example-package",
+  "type": "package",
+  "description": "An example package for Roots Acorn.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Itineris Limited",
+      "email": "dev@itineris.co.uk",
+      "homepage": "https://itineris.co.uk/",
+      "role": "Company"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "ItinerisLtd\\ExamplePackage\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^8.1",
+    "itinerisltd/itineris-wp-coding-standards": "dev-2023-02-01"
+  },
+  "extra": {
+    "acorn": {
+      "providers": [
+        "ItinerisLtd\\ExamplePackage\\Providers\\ExampleServiceProvider"
+      ],
+      "aliases": {
+        "Example": "ItinerisLtd\\ExamplePackage\\Facades\\Example"
+      }
+    }
+  },
+  "scripts": {
+    "style:check": "phpcs",
+    "style:fix": "phpcbf"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}
