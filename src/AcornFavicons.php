@@ -37,7 +37,13 @@ class AcornFavicons
         private array $config,
         private array $paths = []
     ) {
-        add_action('wp_head', [$this, 'getFaviconHeadTags']);
+        // Decide what hook to use in dependency if the site icon is set.
+        if (has_site_icon()) {
+            add_filter('site_icon_meta_tags', [$this, 'generateAllFaviconTags']);
+        } else {
+            add_action('wp_head', [$this, 'getFaviconHeadTags']);
+            add_action('login_head', [$this, 'getFaviconHeadTags']);
+        }
     }
 
     public static function register(): ?self
@@ -83,11 +89,13 @@ class AcornFavicons
     /**
      * Generate meta tags for all favicon types
      *
+     * @param array $tags
      * @return array
      */
-    public function generateAllFaviconTags(): array
+    public function generateAllFaviconTags(array $tags = []): array
     {
         return [
+            ...$tags,
             ...$this->generateManifestTags(),
             ...$this->generatePwaMetaTags(),
             ...$this->generateAppleIconMetaTags(),
