@@ -94,14 +94,22 @@ class AcornFavicons
      */
     public function generateAllFaviconTags(array $tags = []): array
     {
-        return [
+        $icons = [
             ...$tags,
             ...$this->generateManifestTags(),
             ...$this->generatePwaMetaTags(),
-            ...$this->generateAppleIconMetaTags(),
             ...$this->generateFaviconsMetaTags(),
             ...$this->generateWindowsMetaTags(),
         ];
+
+        if (! has_site_icon()) {
+            $icons = [
+                ...$icons,
+                ...$this->generateAppleIconMetaTags(),
+            ];
+        }
+
+        return $icons;
     }
 
     /**
@@ -118,7 +126,12 @@ class AcornFavicons
             ],
             [
                 'rel' => 'icon',
+                'type' => 'image/svg+xml',
                 'href' => $this->getPublicPath('favicon.svg'),
+            ],
+            [
+                'rel' => 'manifest',
+                'href' => $this->getPublicPath('site.webmanifest'),
             ],
         ];
 
@@ -175,7 +188,7 @@ class AcornFavicons
      */
     protected function generateFaviconsMetaTags(): array
     {
-        $sizes = [16, 32, 48];
+        $sizes = [16, 32, 48, 96];
         return $this->generateSizedMetaTags('favicons', $sizes);
     }
 
