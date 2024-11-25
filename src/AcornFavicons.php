@@ -131,7 +131,7 @@ class AcornFavicons
             ],
             [
                 'rel' => 'manifest',
-                'href' => $this->getPublicPath('site.webmanifest'),
+                'href' => $this->getPublicPath('manifest.webmanifest'),
             ],
         ];
 
