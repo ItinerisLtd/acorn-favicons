@@ -232,9 +232,13 @@ class AcornFavicons
     {
         return array_map(function (int|string $size) use ($type): string {
             $dimension = "{$size}x{$size}";
+            $filename = "{$this->faviconConfig[$type]['prefix']}{$dimension}.png";
+            if (96 === $size) {
+                $filename = "android-chrome-96x96.png";
+            }
             return $this->generateLinkTag(
                 $type,
-                "{$this->faviconConfig[$type]['prefix']}{$dimension}.png",
+                $filename,
                 $dimension,
             );
         }, $sizes);
