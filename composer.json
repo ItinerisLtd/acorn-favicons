@@ -22,8 +22,7 @@
     }
   },
   "require": {
-    "php": "^8.1",
-    "itinerisltd/itineris-wp-coding-standards": "*"
+    "php": "^8.1"
   },
   "extra": {
     "acorn": {
@@ -43,5 +42,8 @@
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
+  },
+  "require-dev": {
+    "itinerisltd/itineris-wp-coding-standards": "^1.0"
   }
 }
