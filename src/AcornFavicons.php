@@ -293,10 +293,14 @@ class AcornFavicons
         return sprintf('<%s %s>', $tag, implode(' ', $attrs));
     }
 
+    protected function isManifestRequest(): bool
+    {
+        return ltrim($GLOBALS['wp']->request ?? '', '/') === ltrim(static::MANIFEST_PATH, '/');
+    }
+
     public function serveSiteManifest(): void
     {
-        $requested_uri = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'] ?? ''));
-        if (! str_starts_with($requested_uri, static::MANIFEST_PATH)) {
+        if (! $this->isManifestRequest()) {
             return;
         }
 
