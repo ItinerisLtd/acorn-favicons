@@ -41,7 +41,7 @@ class AcornFavicons
         private array $config,
         private array $paths = []
     ) {
-        $this->app_url = $this->config['appName'] ?? get_bloginfo('name');
+        $this->app_name = $this->config['appName'] ?? get_bloginfo('name');
         $this->app_url = home_url();
 
         // Decide what hook to use in dependency if the site icon is set.
