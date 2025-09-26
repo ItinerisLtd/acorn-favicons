@@ -8,6 +8,9 @@ use Roots\Acorn\Application;
 
 class AcornFavicons
 {
+    protected string $app_name = '';
+    protected string $app_url = '';
+
     private array $faviconConfig = [
         'appleIcon' => [
             'rel' => 'apple-touch-icon',
@@ -26,6 +29,8 @@ class AcornFavicons
         ],
     ];
 
+    protected const MANIFEST_PATH = '/manifest.webmanifest';
+
     /**
      * @param Application $app
      * @param array $config
@@ -36,6 +41,9 @@ class AcornFavicons
         private array $config,
         private array $paths = []
     ) {
+        $this->app_url = $this->config['appName'] ?? get_bloginfo('name');
+        $this->app_url = home_url();
+
         // Decide what hook to use in dependency if the site icon is set.
         if (has_site_icon()) {
             add_filter('site_icon_meta_tags', [$this, 'generateAllFaviconTags']);
@@ -43,6 +51,8 @@ class AcornFavicons
             add_action('wp_head', [$this, 'getFaviconHeadTags']);
             add_action('login_head', [$this, 'getFaviconHeadTags']);
         }
+
+        add_action('template_redirect', [$this, 'serveSiteManifest'], 0);
     }
 
     protected function getPublicPath(string $path, bool $addToPaths = true): ?string
@@ -120,7 +130,7 @@ class AcornFavicons
             ],
             [
                 'rel' => 'manifest',
-                'href' => $this->getPublicPath('manifest.webmanifest'),
+                'href' => $this->getPublicPath(static::MANIFEST_PATH),
             ],
         ];
 
@@ -140,7 +150,7 @@ class AcornFavicons
         $attributes = [
             [
                 'name' => 'apple-mobile-web-app-title',
-                'content' => $this->getAppName(),
+                'content' => $this->app_name,
             ],
         ];
 
@@ -283,11 +293,34 @@ class AcornFavicons
         return sprintf('<%s %s>', $tag, implode(' ', $attrs));
     }
 
-    /**
-     * Get the app name
-     */
-    protected function getAppName(): string
+    public function serveSiteManifest(): void
     {
-        return $this->config['appName'] ?? get_bloginfo('name');
+        $requested_uri = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'] ?? ''));
+        if (! str_starts_with($requested_uri, static::MANIFEST_PATH)) {
+            return;
+        }
+
+        header('Content-Type: application/manifest+json; charset=utf-8');
+
+        echo wp_json_encode([
+            'name' => $this->app_name,
+            'start_url' => $this->app_url,
+            'display' => 'standalone',
+            'background_color' => $this->config['background_color'] ?? '#ffffff',
+            'theme_color' => $this->config['theme_color'] ?? '#ffffff',
+            'icons' => [
+                [
+                    'src' => "{$this->app_url}/android-chrome-192x192.png",
+                    'sizes' => '192x192',
+                    'type' => 'image/png',
+                ],
+                [
+                    'src' => "{$this->app_url}/android-chrome-512x512.png",
+                    'sizes' => '512x512',
+                    'type' => 'image/png',
+                ],
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+        exit;
     }
 }
