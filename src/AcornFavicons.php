@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ItinerisLtd\AcornFavicons;
 
-use Illuminate\Support\Arr;
 use Roots\Acorn\Application;
 
 class AcornFavicons
@@ -13,17 +12,17 @@ class AcornFavicons
         'appleIcon' => [
             'rel' => 'apple-touch-icon',
             'type' => 'image/png',
-            'prefix' => 'apple-touch-icon-',
+            'prefix' => 'apple-touch-icon',
         ],
         'favicons' => [
             'rel' => 'icon',
             'type' => 'image/png',
-            'prefix' => 'favicon-',
+            'prefix' => 'favicon',
         ],
         'windows' => [
             'rel' => 'msapplication-TileImage',
             'type' => 'image/png',
-            'prefix' => 'mstile-',
+            'prefix' => 'mstile',
         ],
     ];
 
@@ -44,16 +43,6 @@ class AcornFavicons
             add_action('wp_head', [$this, 'getFaviconHeadTags']);
             add_action('login_head', [$this, 'getFaviconHeadTags']);
         }
-    }
-
-    public static function register(): ?self
-    {
-        $config = array_filter((array) config('favicons'));
-        if (empty($config)) {
-            return null;
-        }
-
-        return new self($config);
     }
 
     protected function getPublicPath(string $path, bool $addToPaths = true): ?string
@@ -163,7 +152,7 @@ class AcornFavicons
         }
 
         return array_map(
-            fn (array $attr): string => $this->buildMetaTag($attr, 'meta'),
+            fn (array $attr): string => $this->buildMetaTag($attr),
             $attributes,
         );
     }
@@ -219,7 +208,7 @@ class AcornFavicons
         return array_merge(
             $tags,
             array_map(
-                fn (array $attr): string => $this->buildMetaTag($attr, 'meta'),
+                fn (array $attr): string => $this->buildMetaTag($attr),
                 $attributes,
             ),
         );
@@ -232,10 +221,11 @@ class AcornFavicons
     {
         return array_map(function (int|string $size) use ($type): string {
             $dimension = "{$size}x{$size}";
-            $filename = "{$this->faviconConfig[$type]['prefix']}{$dimension}.png";
+            $filename = "{$this->faviconConfig[$type]['prefix']}-{$dimension}.png";
             if (96 === $size) {
-                $filename = "android-chrome-96x96.png";
+                $filename = 'android-chrome-96x96.png';
             }
+
             return $this->generateLinkTag(
                 $type,
                 $filename,
@@ -256,11 +246,11 @@ class AcornFavicons
             'href' => $this->getPublicPath($filename),
         ];
 
-        if ($size) {
+        if (! empty($size)) {
             $attributes['sizes'] = $size;
         }
 
-        return $this->buildMetaTag($attributes);
+        return $this->buildMetaTag($attributes, 'link');
     }
 
     /**
@@ -271,7 +261,7 @@ class AcornFavicons
         return $this->buildMetaTag([
             'name' => $name,
             'content' => $content,
-        ], 'meta');
+        ]);
     }
 
     /**
@@ -279,7 +269,7 @@ class AcornFavicons
      *
      * @param array $attributes
      */
-    protected function buildMetaTag(array $attributes, string $tag = 'link'): string
+    protected function buildMetaTag(array $attributes, string $tag = 'meta'): string
     {
         $attrs = [];
         foreach ($attributes as $key => $value) {

@@ -16,9 +16,10 @@ class AcornFaviconsServiceProvider extends SageServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('AcornFavicons', function () {
-            return new AcornFavicons($this->app, $this->app['config']['acorn-favicons']);
-        });
+        $this->app->singleton(
+            'AcornFavicons',
+            fn (): AcornFavicons => new AcornFavicons($this->app, $this->app['config']['acorn-favicons']),
+        );
 
         $this->mergeConfigFrom(
             __DIR__.'/../../config/favicons.php',
