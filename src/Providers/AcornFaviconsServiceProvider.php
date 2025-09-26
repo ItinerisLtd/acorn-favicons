@@ -35,6 +35,7 @@ class AcornFaviconsServiceProvider extends SageServiceProvider
     {
         $this->publishes([
             __DIR__.'/../../config/acorn-favicons.php' => $this->app->configPath('acorn-favicons.php'),
+            __DIR__.'/../../config/acorn-favicons.json' => $this->app->configPath('acorn-favicons.json'),
         ], 'config');
 
         $this->app->make('AcornFavicons');
