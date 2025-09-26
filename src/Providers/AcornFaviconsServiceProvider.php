@@ -21,8 +21,8 @@ class AcornFaviconsServiceProvider extends SageServiceProvider
         });
 
         $this->mergeConfigFrom(
-            __DIR__.'/../../config/acorn-favicons.php',
-            'acorn-favicons'
+            __DIR__.'/../../config/favicons.php',
+            'favicons'
         );
     }
 
@@ -34,8 +34,8 @@ class AcornFaviconsServiceProvider extends SageServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../../config/acorn-favicons.php' => $this->app->configPath('acorn-favicons.php'),
-            __DIR__.'/../../config/acorn-favicons.json' => $this->app->configPath('acorn-favicons.json'),
+            __DIR__.'/../../config/favicons.php' => $this->app->configPath('favicons.php'),
+            __DIR__.'/../../config/favicons.json' => $this->app->configPath('favicons.json'),
         ], 'config');
 
         $this->app->make('AcornFavicons');
