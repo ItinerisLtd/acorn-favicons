@@ -130,7 +130,7 @@ class AcornFavicons
             ],
             [
                 'rel' => 'manifest',
-                'href' => $this->getPublicPath(static::MANIFEST_PATH),
+                'href' => home_url(static::MANIFEST_PATH),
             ],
         ];
 
