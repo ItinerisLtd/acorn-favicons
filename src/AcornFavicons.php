@@ -93,21 +93,13 @@ class AcornFavicons
      */
     public function generateAllFaviconTags(): array
     {
-        $icons = [
+        return [
             ...$this->generateManifestTags(),
             ...$this->generatePwaMetaTags(),
             ...$this->generateFaviconsMetaTags(),
             ...$this->generateWindowsMetaTags(),
+            ...$this->generateAppleIconMetaTags(),
         ];
-
-        if (! has_site_icon()) {
-            $icons = [
-                ...$icons,
-                ...$this->generateAppleIconMetaTags(),
-            ];
-        }
-
-        return $icons;
     }
 
     /**
