@@ -93,21 +93,13 @@ class AcornFavicons
      */
     public function generateAllFaviconTags(): array
     {
-        $icons = [
+        return [
             ...$this->generateManifestTags(),
             ...$this->generatePwaMetaTags(),
             ...$this->generateFaviconsMetaTags(),
             ...$this->generateWindowsMetaTags(),
+            ...$this->generateAppleIconMetaTags(),
         ];
-
-        if (! has_site_icon()) {
-            $icons = [
-                ...$icons,
-                ...$this->generateAppleIconMetaTags(),
-            ];
-        }
-
-        return $icons;
     }
 
     /**
@@ -309,6 +301,7 @@ class AcornFavicons
 
         echo wp_json_encode([
             'name' => $this->app_name,
+            'short_name' => $this->app_name,
             'start_url' => $this->app_url,
             'display' => 'standalone',
             'background_color' => $this->config['background_color'] ?? '#ffffff',
