@@ -91,10 +91,9 @@ class AcornFavicons
      * @param array $tags
      * @return array
      */
-    public function generateAllFaviconTags(array $tags = []): array
+    public function generateAllFaviconTags(): array
     {
         $icons = [
-            ...$tags,
             ...$this->generateManifestTags(),
             ...$this->generatePwaMetaTags(),
             ...$this->generateFaviconsMetaTags(),
