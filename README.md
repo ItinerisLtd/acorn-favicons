@@ -14,5 +14,6 @@ You can publish the PHP and JSON config files with:
 $ wp acorn vendor:publish --provider="ItinerisLtd\AcornFavicons\Providers\AcornFaviconsServiceProvider"
 ```
 
+## Generating required favicons
 To generate the full range of favicons, use https://github.com/ItinerisLtd/bin/pull/98
 Just provide an SVG file and the script will convert it to all the required formats.
