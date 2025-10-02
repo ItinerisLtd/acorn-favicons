@@ -214,6 +214,7 @@ class AcornFavicons
                 'content' => $this->getPublicPath('browserconfig.xml'),
             ],
         ];
+        $attributes = array_filter($attributes, fn (array $att): bool => ! empty($att['content']));
 
         return array_merge(
             $tags,
