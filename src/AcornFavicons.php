@@ -135,7 +135,7 @@ class AcornFavicons
         ];
 
         return array_map(
-            fn (array $attr): string => $this->buildMetaTag($attr),
+            fn (array $attr): string => $this->buildMetaTag($attr, 'link'),
             $attributes,
         );
     }
