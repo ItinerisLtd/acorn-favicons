@@ -167,7 +167,6 @@ class AcornFavicons
     {
         return [
             $this->generateLinkTag('appleIcon', 'apple-touch-icon.png', '180x180'),
-            $this->generateLinkTag('appleIcon', 'apple-touch-icon-precomposed.png', '180x180'),
         ];
     }
 
