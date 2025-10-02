@@ -309,6 +309,7 @@ class AcornFavicons
 
         echo wp_json_encode([
             'name' => $this->app_name,
+            'short_name' => $this->app_name,
             'start_url' => $this->app_url,
             'display' => 'standalone',
             'background_color' => $this->config['background_color'] ?? '#ffffff',
