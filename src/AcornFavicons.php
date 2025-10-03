@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace ItinerisLtd\AcornFavicons;
 
 use Roots\Acorn\Application;
+use WP_Filesystem_Base;
 
 class AcornFavicons
 {
     protected string $app_name = '';
     protected string $app_url = '';
+    protected ?WP_Filesystem_Base $filesystem = null;
 
     private array $faviconConfig = [
         'appleIcon' => [
@@ -53,6 +55,47 @@ class AcornFavicons
         }
 
         add_action('template_redirect', [$this, 'serveSiteManifest'], 0);
+        add_action('do_favicon', [$this, 'serveMultisiteFavicons'], 0);
+    }
+
+    protected function getFilesystem(): ?WP_Filesystem_Base
+    {
+        if (! defined('ABSPATH')) {
+            return null;
+        }
+
+        if ($this->filesystem instanceof WP_Filesystem_Base) {
+            return $this->filesystem;
+        }
+
+        /**
+         * @var WP_Filesystem_Base|null $filesystem
+         */
+        $filesystem = $GLOBALS['wp_filesystem'] ?? null;
+        if (! $filesystem instanceof WP_Filesystem_Base) {
+            if (! WP_Filesystem()) {
+                return null;
+            }
+
+            $filesystem = $GLOBALS['wp_filesystem'] ?? null;
+        }
+
+        $this->filesystem = $filesystem;
+
+        return $this->filesystem;
+    }
+
+    protected function getFilesystemPath(string $path): ?string
+    {
+        if (! defined('ABSPATH')) {
+            return null;
+        }
+
+        if ($this->getFilesystem()?->exists($path)) {
+            return $this->getFilesystem()?->abspath($path);
+        }
+
+        return null;
     }
 
     protected function getPublicPath(string $path, bool $addToPaths = true): ?string
@@ -61,10 +104,13 @@ class AcornFavicons
             return null;
         }
 
-        $webPath = rtrim(ABSPATH, '/wp');
-        $path = ltrim($path, '/');
+        if (is_multisite()) {
+            $currtent_site = get_current_blog_id();
+            $path = "site-{$currtent_site}-{$path}";
+        }
 
-        if (! file_exists($webPath . '/' . $path)) {
+        $file_path = $this->getFilesystemPath($path);
+        if (empty($file_path)) {
             return null;
         }
 
@@ -319,5 +365,26 @@ class AcornFavicons
             ],
         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         exit;
+    }
+
+    public function serveMultisiteFavicons(): void
+    {
+        if (! is_multisite()) {
+            return;
+        }
+
+        $current_site = get_current_blog_id();
+        if (empty($current_site)) {
+            return;
+        }
+
+        $icon_filename = "favicon-{$current_site}.ico";
+        if (! $this->getFilesystem()->exists($icon_filename)) {
+            return;
+        }
+
+        status_header(200);
+        echo $this->getFilesystem()->get_contents($icon_filename);
+        exit
     }
 }
