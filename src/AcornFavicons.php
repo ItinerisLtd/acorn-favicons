@@ -30,7 +30,7 @@ class AcornFavicons
         ],
     ];
 
-    protected const MANIFEST_PATH = '/manifest.webmanifest';
+    protected const MANIFEST_PATH = '/site.webmanifest';
 
     /**
      * @param Application $app
