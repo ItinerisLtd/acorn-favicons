@@ -31,6 +31,7 @@ class AcornFavicons
     ];
 
     protected const MANIFEST_PATH = '/site.webmanifest';
+    protected const SIZES = [16, 32, 48, 96, 192, 512];
 
     /**
      * @param Application $app
@@ -49,6 +50,7 @@ class AcornFavicons
         // Decide what hook to use in dependency if the site icon is set.
         if (has_site_icon()) {
             add_filter('site_icon_meta_tags', [$this, 'generateAllFaviconTags']);
+            add_filter('site_icon_image_sizes', [$this, 'addIconSizes'], 0);
         } else {
             add_action('wp_head', [$this, 'getFaviconHeadTags']);
             add_action('login_head', [$this, 'getFaviconHeadTags']);
@@ -93,14 +95,15 @@ class AcornFavicons
      * @param array $tags
      * @return array
      */
-    public function generateAllFaviconTags(): array
+    public function generateAllFaviconTags(array $tags = []): array
     {
+        // dd($tags);
         return [
             ...$this->generateManifestTags(),
-            ...$this->generatePwaMetaTags(),
             ...$this->generateFaviconsMetaTags(),
             ...$this->generateWindowsMetaTags(),
             ...$this->generateAppleIconMetaTags(),
+            ...$this->generatePwaMetaTags(),
         ];
     }
 
@@ -113,6 +116,10 @@ class AcornFavicons
     {
         $attributes = [
             [
+                'rel' => 'manifest',
+                'href' => home_url($this->manifest_path),
+            ],
+            [
                 'rel' => 'shortcut icon',
                 'href' => $this->getPublicPath('favicon.ico'),
             ],
@@ -120,10 +127,6 @@ class AcornFavicons
                 'rel' => 'icon',
                 'type' => 'image/svg+xml',
                 'href' => $this->getPublicPath('favicon.svg'),
-            ],
-            [
-                'rel' => 'manifest',
-                'href' => home_url($this->manifest_path),
             ],
         ];
 
@@ -179,8 +182,7 @@ class AcornFavicons
      */
     protected function generateFaviconsMetaTags(): array
     {
-        $sizes = [16, 32, 48, 96];
-        return $this->generateSizedMetaTags('favicons', $sizes);
+        return $this->generateSizedMetaTags('favicons');
     }
 
     /**
@@ -192,7 +194,7 @@ class AcornFavicons
     {
         $sizes = ['150x150'];
         $tags = array_map(
-            fn (string $size): string => $this->generateLinkTag('windows', "mstile-{$size}.png", $size),
+            fn (string $size): string => $this->generateLinkTag('windows', "mstile-{$size}.png", $size, true),
             $sizes,
         );
 
@@ -220,7 +222,7 @@ class AcornFavicons
     /**
      * Generate meta tags for icons with specific sizes
      */
-    protected function generateSizedMetaTags(string $type, array $sizes): array
+    protected function generateSizedMetaTags(string $type): array
     {
         return array_map(function (int|string $size) use ($type): string {
             $dimension = "{$size}x{$size}";
@@ -233,20 +235,21 @@ class AcornFavicons
                 $type,
                 $filename,
                 $dimension,
+                true,
             );
-        }, $sizes);
+        }, static::SIZES);
     }
 
     /**
      * Generate a single meta link tag
      */
-    protected function generateLinkTag(string $type, string $filename, ?string $size = null): string
+    protected function generateLinkTag(string $type, string $filename, ?string $size = null, bool $uploaded = false): string
     {
         $config = $this->faviconConfig[$type];
         $attributes = [
             'rel' => $config['rel'] ?? '',
             'type' => $config['type'] ?? '',
-            'href' => $this->getPublicPath($filename),
+            'href' => $uploaded ? get_site_icon_url($size) : $this->getPublicPath($filename),
         ];
 
         if (! empty($size)) {
@@ -321,5 +324,10 @@ class AcornFavicons
             ],
         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         exit;
+    }
+
+    public function addIconSizes(array $sizes): array
+    {
+        return array_merge($sizes, static::SIZES);
     }
 }
