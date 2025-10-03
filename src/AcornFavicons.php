@@ -297,7 +297,7 @@ class AcornFavicons
             return;
         }
 
-        status_header(201);
+        status_header(200);
         header('Content-Type: application/manifest+json; charset=utf-8');
 
         echo wp_json_encode([
