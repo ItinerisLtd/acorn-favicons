@@ -42,7 +42,7 @@ class AcornFavicons
         private array $config,
         private array $paths = []
     ) {
-        $this->app_name = $this->config['appName'] ?? get_bloginfo('name');
+        $this->app_name = htmlspecialchars_decode($this->config['appName'] ?? get_bloginfo('name'));
         $this->app_url = home_url();
         $this->manifest_path = $this->config['manifest_path'] ?? static::MANIFEST_PATH;
 
