@@ -10,6 +10,7 @@ class AcornFavicons
 {
     protected string $app_name = '';
     protected string $app_url = '';
+    protected string $manifest_path = '';
 
     private array $faviconConfig = [
         'appleIcon' => [
@@ -29,7 +30,7 @@ class AcornFavicons
         ],
     ];
 
-    protected const MANIFEST_PATH = '/manifest.webmanifest';
+    protected const MANIFEST_PATH = '/site.webmanifest';
 
     /**
      * @param Application $app
@@ -43,6 +44,7 @@ class AcornFavicons
     ) {
         $this->app_name = $this->config['appName'] ?? get_bloginfo('name');
         $this->app_url = home_url();
+        $this->manifest_path = $this->config['manifest_path'] ?? static::MANIFEST_PATH;
 
         // Decide what hook to use in dependency if the site icon is set.
         if (has_site_icon()) {
@@ -121,7 +123,7 @@ class AcornFavicons
             ],
             [
                 'rel' => 'manifest',
-                'href' => home_url(static::MANIFEST_PATH),
+                'href' => home_url($this->manifest_path),
             ],
         ];
 
@@ -286,7 +288,7 @@ class AcornFavicons
 
     protected function isManifestRequest(): bool
     {
-        return ltrim($GLOBALS['wp']->request ?? '', '/') === ltrim(static::MANIFEST_PATH, '/');
+        return ltrim($GLOBALS['wp']->request ?? '', '/') === ltrim($this->manifest_path, '/');
     }
 
     public function serveSiteManifest(): void
