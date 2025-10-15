@@ -9,8 +9,10 @@ use Roots\Acorn\Application;
 class AcornFavicons
 {
     protected string $app_name = '';
+    protected string $app_slug = '';
     protected string $app_url = '';
     protected string $manifest_path = '';
+    protected string $prefix = '';
 
     private array $faviconConfig = [
         'appleIcon' => [
@@ -43,6 +45,8 @@ class AcornFavicons
         private array $paths = []
     ) {
         $this->app_name = htmlspecialchars_decode($this->config['appName'] ?? get_bloginfo('name'));
+        $this->app_slug = sanitize_title($this->config['appSlug'] ?? $this->app_name);
+        $this->prefix = is_multisite() ? "{$this->app_slug}-" : '';
         $this->app_url = home_url();
         $this->manifest_path = $this->config['manifest_path'] ?? static::MANIFEST_PATH;
 
@@ -64,7 +68,7 @@ class AcornFavicons
         }
 
         $webPath = rtrim(ABSPATH, '/wp');
-        $path = ltrim($path, '/');
+        $path = ltrim("{$this->prefix}{$path}", '/');
 
         if (! file_exists($webPath . '/' . $path)) {
             return null;
@@ -309,12 +313,12 @@ class AcornFavicons
             'theme_color' => $this->config['theme_color'] ?? '#ffffff',
             'icons' => [
                 [
-                    'src' => "{$this->app_url}/android-chrome-192x192.png",
+                    'src' => "{$this->app_url}/{$this->prefix}android-chrome-192x192.png",
                     'sizes' => '192x192',
                     'type' => 'image/png',
                 ],
                 [
-                    'src' => "{$this->app_url}/android-chrome-512x512.png",
+                    'src' => "{$this->app_url}/{$this->prefix}android-chrome-512x512.png",
                     'sizes' => '512x512',
                     'type' => 'image/png',
                 ],
