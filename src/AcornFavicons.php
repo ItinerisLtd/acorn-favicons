@@ -46,7 +46,7 @@ class AcornFavicons
     ) {
         $this->app_name = htmlspecialchars_decode($this->config['appName'] ?? get_bloginfo('name'));
         $this->app_slug = sanitize_title($this->config['appSlug'] ?? $this->app_name);
-        $this->prefix = is_multisite() ? "{$this->app_slug}-" : '';
+        $this->prefix = is_multisite() && ! (bool) ($this->config['multisite']['use-shared-assets'] ?? false) ? "{$this->app_slug}-" : '';
         $this->app_url = home_url();
         $this->manifest_path = $this->config['manifest_path'] ?? static::MANIFEST_PATH;
 
