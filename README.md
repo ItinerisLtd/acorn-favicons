@@ -17,3 +17,4 @@ $ wp acorn vendor:publish --provider="ItinerisLtd\AcornFavicons\Providers\AcornF
 ## Generating required favicons
 To generate the full range of favicons, use https://github.com/ItinerisLtd/bin/pull/98
 Just provide an SVG file and the script will convert it to all the required formats.
+Put the files into `bedrock/web` so they are available at the root of the website.
