@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace ItinerisLtd\AcornFavicons\Providers;
 
+use Illuminate\Support\ServiceProvider;
 use ItinerisLtd\AcornFavicons\AcornFavicons;
-use Roots\Acorn\Sage\SageServiceProvider;
 
-class AcornFaviconsServiceProvider extends SageServiceProvider
+class AcornFaviconsServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.

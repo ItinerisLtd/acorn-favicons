@@ -33,10 +33,7 @@
   "require-dev": {
     "itinerisltd/itineris-wp-coding-standards": "^1.0",
     "roots/wordpress": "^7.0",
-    "roots/acorn": "^4.3"
-  },
-  "conflict": {
-    "roots/acorn": ">=5.0"
+    "roots/acorn": "^4.3 || ^5.0 || ^6.0"
   },
   "autoload": {
     "psr-4": {
