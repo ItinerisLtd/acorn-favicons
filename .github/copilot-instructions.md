@@ -7,7 +7,7 @@ composer run-script style:check   # PHP_CodeSniffer lint (phpcs)
 composer run-script style:fix     # Auto-fix with phpcbf
 ```
 
-There is no test suite — CI only runs the linter.
+There is no test suite — PR CI only runs the linter. (The `releases.yml` workflow runs `release:build` on tag pushes.)
 
 ## Architecture
 
@@ -24,11 +24,11 @@ This is a [Roots Acorn](https://roots.io/acorn/) package for WordPress/Bedrock t
 
 **Multisite:** When `multisite.use-shared-assets` is `false` (default), favicon filenames are prefixed with the site slug (e.g. `mysite-favicon.ico`) to avoid collisions. The prefix is empty for single-site installs.
 
-**Favicon file expectations:** Physical files must exist at `ABSPATH/../` (i.e. `bedrock/web/`). `getPublicPath()` returns `null` for missing files, which causes empty `href`/`content` attributes to be silently omitted from output tags.
+**Favicon file expectations:** Physical files must exist at `ABSPATH/../` (i.e. `bedrock/web/`). `getPublicPath()` returns `null` for missing files. `buildMetaTag()` skips empty attributes, so `<link>` tags may still be emitted without an `href`. The `msapplication-config` meta tag is an exception — `generateWindowsMetaTags()` explicitly filters it out when `content` is empty.
 
 ## Key Conventions
 
-- All PHP files use `declare(strict_types=1)`.
+- All `src/` PHP files use `declare(strict_types=1)` (config files such as `config/favicons.php` do not).
 - Namespace root: `ItinerisLtd\AcornFavicons\`.
 - Coding standard: `itinerisltd/itineris-wp-coding-standards` (extends WPCS). Text domain is `itineris`.
 - `phpcs.xml` scans only the `src/` directory.
