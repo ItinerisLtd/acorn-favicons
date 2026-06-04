@@ -22,7 +22,7 @@ This is a [Roots Acorn](https://roots.io/acorn/) package for WordPress/Bedrock t
 - `favicons.json` — the user-editable config (theme_color, background_color, manifest_path). Has a JSON Schema reference.
 - `favicons.php` — reads and decodes `favicons.json`, falling back to the package default.
 
-**Multisite:** When `multisite.use-shared-assets` is `false` (default), favicon filenames are prefixed with the site slug (e.g. `mysite-favicon.ico`) to avoid collisions. The prefix is empty for single-site installs.
+**Multisite:** When `multisite.use-shared-assets` is `false` (default), favicon filenames are prefixed with the app slug (e.g. `mysite-favicon.ico`) to avoid collisions. The app slug comes from the `appSlug` config value, or falls back to a sanitised form of `get_bloginfo('name')`. The prefix is empty for single-site installs.
 
 **Favicon file expectations:** Physical files must exist at `ABSPATH/../` (i.e. `bedrock/web/`). `getPublicPath()` returns `null` for missing files. `buildMetaTag()` skips empty attributes, so `<link>` tags may still be emitted without an `href`. The `msapplication-config` meta tag is an exception — `generateWindowsMetaTags()` explicitly filters it out when `content` is empty.
 
