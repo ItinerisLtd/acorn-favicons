@@ -7,7 +7,7 @@ composer run-script style:check   # PHP_CodeSniffer lint (phpcs)
 composer run-script style:fix     # Auto-fix with phpcbf
 ```
 
-There is no test suite — PR CI only runs the linter. (The `releases.yml` workflow runs `release:build` on tag pushes.)
+There is no test suite — PR CI only runs the linter.
 
 ## Architecture
 
@@ -33,4 +33,4 @@ This is a [Roots Acorn](https://roots.io/acorn/) package for WordPress/Bedrock t
 - Coding standard: `itinerisltd/itineris-wp-coding-standards` (extends WPCS). Text domain is `itineris`.
 - `phpcs.xml` scans only the `src/` directory.
 - PHP minimum: **8.1**. Acorn compatibility: **^4.3** (conflicts with >=5.0).
-- The Facade accessor returns `AcornFaviconsClass::class` (the fully-qualified class name), not the string key `'AcornFavicons'` used in the container binding — keep these in sync if refactoring.
+- The Facade accessor uses `AcornFaviconsClass::class` (the FQCN) while the container binds under the string key `'AcornFavicons'` — these intentionally differ. If the class is renamed, update the Facade accessor; if the binding key changes, update `$this->app->make()` in the service provider.
